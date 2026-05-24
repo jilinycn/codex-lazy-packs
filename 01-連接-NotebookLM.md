@@ -1,51 +1,51 @@
-# Codex 懶人包 #01：連接 Google NotebookLM
+# Codex 懒人包 #01：连接 Google NotebookLM
 
 > 版本：v0.1（Codex 版）
 > 更新日期：2026-04-26
 
-> 📌 **本懶人包可獨立執行**：會自動檢查並安裝所需工具。
+> 📌 **本懒人包可独立执行**：会自动检查并安装所需工具。
 
 ---
 
-## 這個懶人包會幫你做什麼？
+## 这个懒人包会帮你做什么？
 
-讓 Codex CLI 能直接操控 NotebookLM：建 notebook、上傳資料來源、產生簡報/資訊圖表/音訊/影片/心智圖/測驗等，成品自動下載到本機資料夾。
+让 Codex CLI 能直接操控 NotebookLM：建 notebook、上传资料来源、产生简报/资讯图表/音讯/影片/心智图/测验等，成品自动下载到本机资料夹。
 
 ---
 
 ## 原理
 
 ```
-Codex CLI ←(MCP 協定)→ nlm（翻譯官）←(Google 登入)→ NotebookLM
+Codex CLI ←(MCP 协定)→ nlm（翻译官）←(Google 登入)→ NotebookLM
 ```
 
-`nlm` 是 stdio MCP server，Codex 透過 MCP 協定呼叫它，它再去模擬瀏覽器操作 NotebookLM。
+`nlm` 是 stdio MCP server，Codex 透过 MCP 协定呼叫它，它再去模拟浏览器操作 NotebookLM。
 
-> 💡 **跟 Claude Code 版的差別**：MCP server 本體（`notebooklm-mcp-cli`）一模一樣，只是註冊到 Codex 的方式不同（Codex 用 `~/.codex/config.toml`，Claude Code 用 `~/.claude/settings.json`）。
-
----
-
-## 先備條件
-
-- [ ] Codex CLI 已安裝
-- [ ] Google 帳號
-- [ ] 電腦有網路連線
+> 💡 **跟 Claude Code 版的差别**：MCP server 本体（`notebooklm-mcp-cli`）一模一样，只是注册到 Codex 的方式不同（Codex 用 `~/.codex/config.toml`，Claude Code 用 `~/.claude/settings.json`）。
 
 ---
 
-## 請 Codex 幫我執行以下步驟
+## 先备条件
 
-### 步驟零：環境檢查
+- [ ] Codex CLI 已安装
+- [ ] Google 帐号
+- [ ] 电脑有网路连线
 
-1. 作業系統
-2. `git --version`，沒有就裝
-3. `uv --version`，沒有則步驟一安裝
-4. 網路連線
+---
+
+## 请 Codex 帮我执行以下步骤
+
+### 步骤零：环境检查
+
+1. 作业系统
+2. `git --version`，没有就装
+3. `uv --version`，没有则步骤一安装
+4. 网路连线
 5. `codex --version`
 
 ---
 
-### 步驟一：安裝 uv（如果沒裝）
+### 步骤一：安装 uv（如果没装）
 
 **Windows（PowerShell）**：
 ```bash
@@ -59,53 +59,53 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 ---
 
-### 步驟二：安裝 NotebookLM MCP CLI
+### 步骤二：安装 NotebookLM MCP CLI
 
 ```bash
 uv tool install notebooklm-mcp-cli
 ```
 
-確認：
+确认：
 ```bash
 nlm --version
 ```
 
-> `nlm: command not found` → 重開終端機；仍失敗代表 uv 工具路徑沒進 PATH，告訴使用者把 `uv tool dir --bin` 印出的路徑加進 PATH。
+> `nlm: command not found` → 重开终端机；仍失败代表 uv 工具路径没进 PATH，告诉使用者把 `uv tool dir --bin` 印出的路径加进 PATH。
 
 ---
 
-### 步驟三：登入 Google 帳號
+### 步骤三：登入 Google 帐号
 
 ```bash
 nlm login
 ```
 
-> 🖐️ 瀏覽器會開 Google 登入頁，登入後 CLI 自動擷取認證。
+> 🖐️ 浏览器会开 Google 登入页，登入后 CLI 自动撷取认证。
 
-確認：
+确认：
 ```bash
 nlm doctor
 ```
 
 ---
 
-### 步驟四：把 NotebookLM 註冊為 Codex 的 MCP server
+### 步骤四：把 NotebookLM 注册为 Codex 的 MCP server
 
-> ✅ 三種 Codex 共用 `~/.codex/config.toml`，做一次三邊都吃到。任選一條路：
+> ✅ 三种 Codex 共用 `~/.codex/config.toml`，做一次三边都吃到。任选一条路：
 
-**方法 A：Codex Desktop GUI（最推薦）**
+**方法 A：Codex Desktop GUI（最推荐）**
 
-1. 開 Codex Desktop → 設定 → **Integrations & MCP**
-2. 點 **Add server**（或類似的「新增」按鈕）
+1. 开 Codex Desktop → 设定 → **Integrations & MCP**
+2. 点 **Add server**（或类似的「新增」按钮）
 3. 填：
    - Name：`notebooklm`
    - Command：`nlm`
    - Args：`mcp`
-4. 儲存
+4. 储存
 
-**方法 B：手動編輯 `~/.codex/config.toml`**
+**方法 B：手动编辑 `~/.codex/config.toml`**
 
-> Desktop：設定 → Integrations & MCP → 「Open config.toml」也能直接打開這檔；IDE：齒輪 → MCP settings → Open config.toml；用記事本/編輯器開亦可。
+> Desktop：设定 → Integrations & MCP → 「Open config.toml」也能直接打开这档；IDE：齿轮 → MCP settings → Open config.toml；用记事本/编辑器开亦可。
 
 ```toml
 [mcp_servers.notebooklm]
@@ -113,11 +113,11 @@ command = "nlm"
 args = ["mcp"]
 ```
 
-> 💡 路徑：Windows `C:\Users\<你>\.codex\config.toml`，macOS/Linux `~/.codex/config.toml`。檔案不存在就新建。
+> 💡 路径：Windows `C:\Users\<你>\.codex\config.toml`，macOS/Linux `~/.codex/config.toml`。档案不存在就新建。
 >
-> ⚠️ **Section 名稱必須是 `mcp_servers`**（底線、複數）。寫成 `mcp-servers` 或 `mcpservers` Codex 會靜默忽略。
+> ⚠️ **Section 名称必须是 `mcp_servers`**（底线、复数）。写成 `mcp-servers` 或 `mcpservers` Codex 会静默忽略。
 
-**方法 C：CLI（只給有裝 CLI 的人）**
+**方法 C：CLI（只给有装 CLI 的人）**
 
 ```bash
 codex mcp add notebooklm -- nlm mcp
@@ -125,7 +125,7 @@ codex mcp add notebooklm -- nlm mcp
 
 ---
 
-### 步驟五：建立本地資料夾
+### 步骤五：建立本地资料夹
 
 在 Documents 下建：
 ```
@@ -143,38 +143,38 @@ Documents/
 
 ---
 
-### 步驟六：重啟 Codex 並驗證
+### 步骤六：重启 Codex 并验证
 
-> 🖐️ **Desktop**：完全結束 app（不只是關視窗），重新開啟。
-> **IDE 擴充**：Reload Window（VSCode：`Cmd/Ctrl+Shift+P` → Reload Window）。
-> **CLI**：`exit` 後重新 `codex`。
+> 🖐️ **Desktop**：完全结束 app（不只是关视窗），重新开启。
+> **IDE 扩充**：Reload Window（VSCode：`Cmd/Ctrl+Shift+P` → Reload Window）。
+> **CLI**：`exit` 后重新 `codex`。
 
-驗證：
-1. 對 Codex 說「列出我的 NotebookLM 筆記本清單」
-2. 能成功列出（即使空的）→ 連接成功
-3. Desktop 用戶可在 Integrations & MCP 設定面板看 `notebooklm` 顯示為 ✅ 連線中
-
----
-
-### 步驟七：功能測試
-
-1. 建一個叫「測試筆記本」的 notebook
-2. 確認建立成功
-3. 刪除它
-4. ✅ 「全部完成！Codex 已連接 NotebookLM。」
+验证：
+1. 对 Codex 说「列出我的 NotebookLM 笔记本清单」
+2. 能成功列出（即使空的）→ 连接成功
+3. Desktop 用户可在 Integrations & MCP 设定面板看 `notebooklm` 显示为 ✅ 连线中
 
 ---
 
-## 如果失敗
+### 步骤七：功能测试
 
-對 Codex 說：「NotebookLM 懶人包執行失敗，清除設定重跑。」
+1. 建一个叫「测试笔记本」的 notebook
+2. 确认建立成功
+3. 删除它
+4. ✅ 「全部完成！Codex 已连接 NotebookLM。」
 
-復原：
-- **Desktop**：設定 → Integrations & MCP → 找到 `notebooklm` → 刪除/停用
-- **手動**：編輯 `~/.codex/config.toml` 移除 `[mcp_servers.notebooklm]` 段
+---
+
+## 如果失败
+
+对 Codex 说：「NotebookLM 懒人包执行失败，清除设定重跑。」
+
+复原：
+- **Desktop**：设定 → Integrations & MCP → 找到 `notebooklm` → 删除/停用
+- **手动**：编辑 `~/.codex/config.toml` 移除 `[mcp_servers.notebooklm]` 段
 - **CLI**：`codex mcp remove notebooklm`
 
-清掉 nlm 本體：
+清掉 nlm 本体：
 ```bash
 uv tool uninstall notebooklm-mcp-cli
 nlm logout 2>/dev/null
@@ -182,20 +182,20 @@ nlm logout 2>/dev/null
 
 ---
 
-## 常見問題
+## 常见问题
 
-| 問題 | 解法 |
+| 问题 | 解法 |
 |------|------|
-| `nlm: command not found` | 重開終端機；把 `uv tool dir --bin` 路徑加進 PATH |
-| 登入後 `nlm doctor` 顯示未認證 | 重跑 `nlm login` |
-| Codex 看不到 NotebookLM 工具 | Desktop：設定 → Integrations & MCP 看 `notebooklm` 是否啟用 / 連線；CLI：`codex mcp list` |
-| `codex mcp` 指令找不到 | 你沒裝 CLI，用 Desktop GUI 或手動編輯 config.toml |
-| 設定改了沒生效 | section 名稱要 `mcp_servers`（底線、複數），寫錯會被靜默忽略 |
-| Windows 上指令格式錯誤 | 用 PowerShell 或 Git Bash，別用 CMD |
+| `nlm: command not found` | 重开终端机；把 `uv tool dir --bin` 路径加进 PATH |
+| 登入后 `nlm doctor` 显示未认证 | 重跑 `nlm login` |
+| Codex 看不到 NotebookLM 工具 | Desktop：设定 → Integrations & MCP 看 `notebooklm` 是否启用 / 连线；CLI：`codex mcp list` |
+| `codex mcp` 指令找不到 | 你没装 CLI，用 Desktop GUI 或手动编辑 config.toml |
+| 设定改了没生效 | section 名称要 `mcp_servers`（底线、复数），写错会被静默忽略 |
+| Windows 上指令格式错误 | 用 PowerShell 或 Git Bash，别用 CMD |
 
 ---
 
-## 相關連結
+## 相关连结
 
 - [notebooklm-mcp-cli GitHub](https://github.com/jacob-bd/notebooklm-mcp-cli)
 - [Codex MCP 官方文件](https://developers.openai.com/codex/mcp)
